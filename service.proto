@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+option go_package = ".;grpc";
+package reveald;
+import "google/protobuf/any.proto";
+
+service RevealdService {
+    rpc NewRequest (Request) returns (Result);
+}
+
+message Request {
+    string target = 1;
+    repeated Parameter parameters = 2;
+}
+
+message Parameter {
+    string name = 1;
+    repeated string values = 2;
+}
+
+message Result {
+    sint64 duration = 1;
+    sint64 total_hit_count = 2;
+    PageResult pages = 3;
+    map<string, BucketList> buckets = 4;
+    repeated SortOption sort = 5;
+    repeated google.protobuf.Any hits = 6;
+}
+
+message BucketList {
+    repeated Bucket values = 1;
+}
+
+message Bucket {
+    sint64 hit_count = 1;
+    string value = 2;
+}
+
+message PageResult {
+    sint64 count = 1;
+    sint64 current = 2;
+}
+
+message SortOption {
+    string name = 1;
+    bool selected = 2;
+    bool ascending = 3;
+}
